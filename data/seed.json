@@ -1,0 +1,116 @@
+{
+  "posts": [
+    {
+      "id": "seed-1",
+      "date": "2026-03-02",
+      "post_text": "A coisa mais difícil de ser CPO não é priorizar features.\n\nÉ dizer não para pessoas brilhantes que tiveram ideias brilhantes.\n\nSemana passada cortei 3 iniciativas do roadmap. Todas tinham mérito. Todas resolveriam problemas reais dos clientes.\n\nMas a pergunta nunca é \"isso é bom?\" — é \"isso é melhor que tudo que já decidimos fazer?\"\n\nQuando você diz sim para algo, está dizendo não para outra coisa. Sempre.\n\nO trabalho real de produto é fazer escolhas dolorosas com informação incompleta. E depois bancar.",
+      "post_url": "https://linkedin.com/in/namsimmon/post-1",
+      "pillar": "Execução",
+      "likes": 189,
+      "comments": 42,
+      "reposts": 12,
+      "impressions": 8500,
+      "image_attached": false,
+      "analysis": null,
+      "created_at": "2026-03-02T10:00:00Z"
+    },
+    {
+      "id": "seed-2",
+      "date": "2026-03-08",
+      "post_text": "Meu filho de 4 anos me perguntou ontem: \"Pai, por que você trabalha tanto?\"\n\nEu ia dar uma resposta automática. Algo como \"para dar uma vida boa pra você\".\n\nMas parei. E pensei de verdade.\n\nA resposta honesta é: porque eu gosto. Porque construir algo do zero me faz sentir vivo. Porque resolver problemas difíceis é o meu jogo.\n\nMas também: porque às vezes eu confundo urgência com importância. E preciso lembrar que jantar junto é mais estratégico que qualquer sprint review.\n\nEquilíbrio não é 50/50. É estar presente de verdade quando está presente.",
+      "post_url": "https://linkedin.com/in/namsimmon/post-2",
+      "pillar": "Família",
+      "likes": 312,
+      "comments": 67,
+      "reposts": 28,
+      "impressions": 14200,
+      "image_attached": false,
+      "analysis": null,
+      "created_at": "2026-03-08T10:00:00Z"
+    },
+    {
+      "id": "seed-3",
+      "date": "2026-03-12",
+      "post_text": "O mercado de resíduos no Brasil movimenta R$ 90 bilhões por ano.\n\nE a maioria das empresas ainda gerencia isso em planilha Excel.\n\nQuando começamos a Musa, as pessoas perguntavam: \"Resíduos? Sério?\"\n\nSério. Porque onde tem ineficiência massiva, tem oportunidade massiva.\n\n3 coisas que aprendi construindo climate-tech no Brasil:\n1. Regulação é feature, não bug — PNRS está do nosso lado\n2. O mercado é gigante mas fragmentado — quem integra, ganha\n3. Sustentabilidade vende quando resolve dor real de negócio, não quando é discurso ESG\n\nClimate-tech não precisa ser sexy. Precisa funcionar.",
+      "post_url": "https://linkedin.com/in/namsimmon/post-3",
+      "pillar": "Climate-tech",
+      "likes": 156,
+      "comments": 31,
+      "reposts": 18,
+      "impressions": 9800,
+      "image_attached": true,
+      "analysis": null,
+      "created_at": "2026-03-12T10:00:00Z"
+    },
+    {
+      "id": "seed-4",
+      "date": "2026-03-18",
+      "post_text": "Errei feio na última sprint.\n\nDeixei o time trabalhar 2 semanas numa feature baseada numa hipótese que eu não validei.\n\nResultado: feature pronta, nenhum cliente queria.\n\nO erro não foi a hipótese estar errada. Hipóteses erradas são normais.\n\nO erro foi não ter testado antes de construir. Bastava 5 conversas com clientes. 5.\n\nAgora temos uma regra: nenhuma feature entra no sprint sem pelo menos 3 entrevistas de validação.\n\nCaro? Não. Caro é 2 semanas de engenharia no lixo.",
+      "post_url": "https://linkedin.com/in/namsimmon/post-4",
+      "pillar": "Execução",
+      "likes": 224,
+      "comments": 53,
+      "reposts": 15,
+      "impressions": 11200,
+      "image_attached": false,
+      "analysis": null,
+      "created_at": "2026-03-18T10:00:00Z"
+    },
+    {
+      "id": "seed-5",
+      "date": "2026-03-22",
+      "post_text": "Toda startup climate-tech deveria ter um \"reality check\" mensal.\n\nNa Musa fazemos assim:\n\n1. Quantas toneladas de resíduo foram desviadas de aterro este mês?\n2. Quanto dinheiro economizamos para os clientes?\n3. Nosso produto resolve uma dor real ou estamos fazendo greenwashing tech?\n\nSe a resposta da pergunta 3 te incomoda, bom. Significa que você está sendo honesto.\n\nImpacto ambiental sem modelo de negócio é hobby.\nModelo de negócio sem impacto ambiental é o status quo.\n\nPrecisamos dos dois.",
+      "post_url": "https://linkedin.com/in/namsimmon/post-5",
+      "pillar": "Climate-tech",
+      "likes": 178,
+      "comments": 38,
+      "reposts": 22,
+      "impressions": 10500,
+      "image_attached": false,
+      "analysis": null,
+      "created_at": "2026-03-22T10:00:00Z"
+    }
+  ],
+  "weekly": [
+    {
+      "id": "seed-w1",
+      "week_start": "2026-02-23",
+      "follower_count": 11200,
+      "profile_views": 420,
+      "search_appearances": 180,
+      "created_at": "2026-02-23T10:00:00Z"
+    },
+    {
+      "id": "seed-w2",
+      "week_start": "2026-03-02",
+      "follower_count": 11480,
+      "profile_views": 510,
+      "search_appearances": 210,
+      "created_at": "2026-03-02T10:00:00Z"
+    },
+    {
+      "id": "seed-w3",
+      "week_start": "2026-03-09",
+      "follower_count": 11920,
+      "profile_views": 680,
+      "search_appearances": 290,
+      "created_at": "2026-03-09T10:00:00Z"
+    },
+    {
+      "id": "seed-w4",
+      "week_start": "2026-03-16",
+      "follower_count": 12350,
+      "profile_views": 590,
+      "search_appearances": 250,
+      "created_at": "2026-03-16T10:00:00Z"
+    },
+    {
+      "id": "seed-w5",
+      "week_start": "2026-03-23",
+      "follower_count": 12680,
+      "profile_views": 620,
+      "search_appearances": 270,
+      "created_at": "2026-03-23T10:00:00Z"
+    }
+  ]
+}
