@@ -1,117 +1,121 @@
-import type { WeeklySnapshot, ForecastPoint, ForecastResult } from "./types";
+import type { Post, ForecastPoint, ForecastResult } from "./types";
 
-function linearRegression(points: { x: number; y: number }[]): {
-  slope: number;
-  intercept: number;
-} {
-  const n = points.length;
-  let sumX = 0;
-  let sumY = 0;
-  let sumXY = 0;
-  let sumXX = 0;
+function percentile(arr: number[], p: number): number {
+  if (arr.length === 0) return 0;
+  const sorted = [...arr].sort((a, b) => a - b);
+  const idx = (p / 100) * (sorted.length - 1);
+  const lower = Math.floor(idx);
+  const upper = Math.ceil(idx);
+  if (lower === upper) return sorted[lower];
+  return sorted[lower] + (sorted[upper] - sorted[lower]) * (idx - lower);
+}
 
-  for (const p of points) {
-    sumX += p.x;
-    sumY += p.y;
-    sumXY += p.x * p.y;
-    sumXX += p.x * p.x;
-  }
-
-  const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
-  const intercept = (sumY - slope * sumX) / n;
-  return { slope, intercept };
+function average(arr: number[]): number {
+  if (arr.length === 0) return 0;
+  return arr.reduce((a, b) => a + b, 0) / arr.length;
 }
 
 export function generateForecast(
-  snapshots: WeeklySnapshot[],
-  goal: number = 20000
+  posts: Post[],
+  currentFollowers: number,
+  target: number,
+  targetDate: string
 ): ForecastResult {
-  if (snapshots.length < 4) {
-    return {
-      points: snapshots.map((s) => ({
-        week: s.week_start,
-        optimistic: s.follower_count,
-        base: s.follower_count,
-        pessimistic: s.follower_count,
-        actual: s.follower_count,
-      })),
-      eta_base: null,
-      eta_optimistic: null,
-      eta_pessimistic: null,
-      insufficient_data: true,
-    };
-  }
+  const followersPerPost = posts.length > 0
+    ? posts.map((p) => p.followers_gained)
+    : [15]; // default when no data
 
-  const sorted = [...snapshots].sort(
-    (a, b) =>
-      new Date(a.week_start).getTime() - new Date(b.week_start).getTime()
-  );
+  const fppConservative = posts.length > 0 ? percentile(followersPerPost, 25) : 10;
+  const fppBase = posts.length > 0 ? average(followersPerPost) : 15;
+  const fppAggressive = posts.length > 0 ? percentile(followersPerPost, 75) : 25;
 
-  const baseDate = new Date(sorted[0].week_start).getTime();
-  const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+  const ORGANIC_RATE = 0.002; // 0.2% per week
+  const targetDateObj = new Date(targetDate);
+  const now = new Date();
 
-  const regressionPoints = sorted.map((s) => ({
-    x: (new Date(s.week_start).getTime() - baseDate) / WEEK_MS,
-    y: s.follower_count,
-  }));
+  const points: ForecastPoint[] = [];
+  let conservative = currentFollowers;
+  let base = currentFollowers;
+  let aggressive = currentFollowers;
 
-  const { slope, intercept } = linearRegression(regressionPoints);
+  let etaConservative: string | null = null;
+  let etaBase: string | null = null;
+  let etaAggressive: string | null = null;
 
-  const actualPoints: ForecastPoint[] = sorted.map((s) => ({
-    week: s.week_start,
-    optimistic: s.follower_count,
-    base: s.follower_count,
-    pessimistic: s.follower_count,
-    actual: s.follower_count,
-  }));
+  // Project month by month (up to 24 months)
+  for (let m = 0; m < 24; m++) {
+    const monthDate = new Date(now);
+    monthDate.setMonth(monthDate.getMonth() + m + 1);
+    const weeksInMonth = 4.33;
 
-  const lastSnapshot = sorted[sorted.length - 1];
-  const lastDate = new Date(lastSnapshot.week_start);
-  const lastWeekIndex =
-    (lastDate.getTime() - baseDate) / WEEK_MS;
+    // Conservative: 1x/week
+    const conservativeGrowth = fppConservative * 1 * weeksInMonth + conservative * ORGANIC_RATE * weeksInMonth;
+    conservative += conservativeGrowth;
 
-  const forecastWeeks = 52;
-  const forecastPoints: ForecastPoint[] = [];
+    // Base: 2x/week
+    const baseGrowth = fppBase * 2 * weeksInMonth + base * ORGANIC_RATE * weeksInMonth;
+    base += baseGrowth;
 
-  for (let i = 1; i <= forecastWeeks; i++) {
-    const weekIndex = lastWeekIndex + i;
-    const forecastDate = new Date(
-      lastDate.getTime() + i * WEEK_MS
-    );
-    const weekStr = forecastDate.toISOString().split("T")[0];
+    // Aggressive: 3x/week
+    const aggressiveGrowth = fppAggressive * 3 * weeksInMonth + aggressive * ORGANIC_RATE * weeksInMonth;
+    aggressive += aggressiveGrowth;
 
-    const baseValue = Math.round(intercept + slope * weekIndex);
-    const optimisticValue = Math.round(
-      intercept + slope * 1.2 * weekIndex
-    );
-    const pessimisticValue = Math.round(
-      intercept + slope * 0.8 * weekIndex
-    );
+    const monthStr = monthDate.toLocaleDateString("pt-BR", { month: "short", year: "numeric" });
 
-    forecastPoints.push({
-      week: weekStr,
-      base: Math.max(baseValue, lastSnapshot.follower_count),
-      optimistic: Math.max(optimisticValue, lastSnapshot.follower_count),
-      pessimistic: Math.max(pessimisticValue, lastSnapshot.follower_count),
+    points.push({
+      month: monthStr,
+      conservative: Math.round(conservative),
+      base: Math.round(base),
+      aggressive: Math.round(aggressive),
     });
+
+    if (!etaConservative && conservative >= target) {
+      etaConservative = monthStr;
+    }
+    if (!etaBase && base >= target) {
+      etaBase = monthStr;
+    }
+    if (!etaAggressive && aggressive >= target) {
+      etaAggressive = monthStr;
+    }
   }
 
-  const allPoints = [...actualPoints, ...forecastPoints];
+  // Recommendation logic
+  let recommendation: string;
+  const targetMonth = targetDateObj.toLocaleDateString("pt-BR", { month: "short", year: "numeric" });
 
-  const findEta = (scenario: "base" | "optimistic" | "pessimistic"): string | null => {
-    for (const point of forecastPoints) {
-      if (point[scenario] >= goal) {
-        return point.week;
+  if (etaBase && new Date(points.find((p) => p.month === etaBase)?.month ? targetDateObj : now) >= now) {
+    // Check if base scenario reaches target before target date
+    const baseReachMonth = points.findIndex((p) => p.base >= target);
+    const targetReachMonth = points.findIndex((p) => {
+      const d = new Date(now);
+      d.setMonth(d.getMonth() + points.indexOf(p) + 1);
+      return d >= targetDateObj;
+    });
+
+    if (baseReachMonth !== -1 && (targetReachMonth === -1 || baseReachMonth <= targetReachMonth)) {
+      recommendation = "2x/semana é suficiente. Foque em qualidade.";
+    } else if (etaAggressive) {
+      const aggReachMonth = points.findIndex((p) => p.aggressive >= target);
+      if (aggReachMonth !== -1 && (targetReachMonth === -1 || aggReachMonth <= targetReachMonth)) {
+        recommendation = "Precisa de 3x/semana OU melhorar engajamento por post.";
+      } else {
+        recommendation = "Meta agressiva. Considere: (a) viral posts, (b) collabs, (c) ajustar meta.";
       }
+    } else {
+      recommendation = "Meta agressiva. Considere: (a) viral posts, (b) collabs, (c) ajustar meta.";
     }
-    return null;
-  };
+  } else if (etaAggressive) {
+    recommendation = "Precisa de 3x/semana OU melhorar engajamento por post.";
+  } else {
+    recommendation = "Meta agressiva. Considere: (a) viral posts, (b) collabs, (c) ajustar meta.";
+  }
 
   return {
-    points: allPoints,
-    eta_base: findEta("base"),
-    eta_optimistic: findEta("optimistic"),
-    eta_pessimistic: findEta("pessimistic"),
-    insufficient_data: false,
+    points,
+    eta_conservative: etaConservative,
+    eta_base: etaBase,
+    eta_aggressive: etaAggressive,
+    recommendation,
   };
 }

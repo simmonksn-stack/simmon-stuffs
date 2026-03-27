@@ -2,13 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
 body {
-  background-color: #020617;
+  background-color: #0F172A;
   color: #e2e8f0;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 
 @layer utilities {
   .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+  .font-mono-nums {
+    font-family: 'JetBrains Mono', monospace;
     font-variant-numeric: tabular-nums;
   }
 }

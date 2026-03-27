@@ -1,67 +1,87 @@
-export interface PostAnalysis {
-  hook_score: number;
-  hook_analysis: string;
-  structure_score: number;
-  structure_analysis: string;
-  tone_score: number;
-  tone_analysis: string;
-  engagement_score: number;
-  engagement_analysis: string;
-  pillar_alignment: number;
-  overall_score: number;
-  what_worked: string;
-  what_to_improve: string;
-  recommendation: string;
-}
+export type ContentPillar =
+  | "Produto & Execução"
+  | "Operador & Bastidores"
+  | "Bastidores de Empresa"
+  | "Pai & Família"
+  | "Líder & Liderança";
 
-export type ContentPillar = "Execução" | "Família" | "Climate-tech";
+export const PILLARS: ContentPillar[] = [
+  "Produto & Execução",
+  "Operador & Bastidores",
+  "Bastidores de Empresa",
+  "Pai & Família",
+  "Líder & Liderança",
+];
 
 export interface Post {
   id: string;
+  title: string;
+  url: string;
   date: string;
-  post_text: string;
-  post_url: string;
   pillar: ContentPillar;
-  likes: number;
+  impressions: number;
+  members_reached: number;
+  followers_gained: number;
+  reactions: number;
   comments: number;
   reposts: number;
-  impressions: number;
-  image_attached: boolean;
-  analysis: PostAnalysis | null;
+  saves: number;
+  sends: number;
+  profile_viewers: number | null;
+  score: number | null;
   created_at: string;
 }
 
-export interface WeeklySnapshot {
+export interface BoardSettings {
+  current_followers: number;
+  target_followers: number;
+  target_date: string;
+}
+
+export interface LineupItem {
   id: string;
-  week_start: string;
-  follower_count: number;
-  profile_views: number;
-  search_appearances: number;
-  created_at: string;
+  dia: string;
+  pilar: ContentPillar;
+  tema: string;
+  hook: string;
+  estrutura: string[];
+  timing: string;
+  score_confianca: number;
+  approved: boolean;
+  draft: string | null;
+}
+
+export interface TrendingTopic {
+  tema: string;
+  relevancia: string;
+  angulo: string;
+}
+
+export interface PillarTrending {
+  pilar: string;
+  temas: TrendingTopic[];
 }
 
 export interface ForecastPoint {
-  week: string;
-  optimistic: number;
+  month: string;
+  conservative: number;
   base: number;
-  pessimistic: number;
-  actual?: number;
+  aggressive: number;
 }
 
 export interface ForecastResult {
   points: ForecastPoint[];
+  eta_conservative: string | null;
   eta_base: string | null;
-  eta_optimistic: string | null;
-  eta_pessimistic: string | null;
-  insufficient_data: boolean;
+  eta_aggressive: string | null;
+  recommendation: string;
 }
 
 export interface PillarStats {
   pillar: ContentPillar;
   count: number;
-  avg_likes: number;
-  avg_comments: number;
-  avg_impressions: number;
   avg_score: number;
-  engagement_rate: number;
+  avg_impressions: number;
+  avg_followers_gained: number;
+  total_followers_gained: number;
 }
