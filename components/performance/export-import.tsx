@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Download, Upload, FileSpreadsheet, X, Check, AlertTriangle } from "lucide-react";
 import { exportAllData, importAllData } from "@/lib/storage";
 import { parseLinkedInXlsx } from "@/lib/xlsx-parser";
-import type { ImportResult } from "@/lib/xlsx-parser";
 import type { Post, ContentPillar } from "@/lib/types";
 import { PILLARS } from "@/lib/types";
 import { pillarBgColor } from "@/lib/utils";
@@ -15,7 +14,7 @@ interface ExportImportProps {
 }
 
 export function ExportImport({ onImport, onAddPosts }: ExportImportProps) {
-  const [preview, setPreview] = useState<ImportResult | null>(null);
+  const [preview, setPreview] = useState<{ posts: Post[]; warnings: string[] } | null>(null);
   const [editingPosts, setEditingPosts] = useState<Post[]>([]);
 
   function handleExport() {
@@ -128,9 +127,6 @@ export function ExportImport({ onImport, onAddPosts }: ExportImportProps) {
                 </h3>
                 <p className="text-xs text-slate-400 mt-0.5">
                   {editingPosts.length} post{editingPosts.length !== 1 ? "s" : ""} encontrado{editingPosts.length !== 1 ? "s" : ""}
-                  {preview.columnsFound.length > 0 && (
-                    <span> &middot; Colunas mapeadas: {preview.columnsFound.join(", ")}</span>
-                  )}
                 </p>
               </div>
               <button onClick={() => setPreview(null)} className="text-slate-400 hover:text-white">
