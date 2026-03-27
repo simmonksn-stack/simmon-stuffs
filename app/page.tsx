@@ -66,6 +66,13 @@ export default function StrategyBoard() {
     savePosts(scored);
   }
 
+  function handleAddPosts(newPosts: Post[]) {
+    const updated = [...newPosts, ...posts];
+    const scored = recalculateAllScores(updated);
+    setPosts(scored);
+    savePosts(scored);
+  }
+
   function handleDeletePost(id: string) {
     if (!confirm("Deletar este post?")) return;
     storageDelete(id);
@@ -167,7 +174,7 @@ export default function StrategyBoard() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <PostForm onSubmit={handleAddPost} />
-            <ExportImport onImport={reloadData} />
+            <ExportImport onImport={reloadData} onAddPosts={handleAddPosts} />
           </div>
 
           <SummaryCards posts={posts} />
